@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="im.keen.keenchat" >
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Holo.Light" >
+        <!--- The theme option above is the global theme option-->
+        <!--- Below are the specifications for the activities (i.e. screens) that the app has -->
+        <!--- Inside each activity java file are references to the xml layouts it depends on -->
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+
+           >
+        </activity>
+        <activity
+            android:name=".EventActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:screenOrientation="portrait"
+            >
+        </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+            <!-- This here is using a specific theme for a specific page, for the login screen we
+             don't want to show the bar at the top.-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

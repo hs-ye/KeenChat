@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KeenChat</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="chat_send_button_text">Send</string>
+    <string name="chat_hint">Enter message here</string>
+    <string name="swipe_refresh_hint">Swipe down to refresh list</string>
+    <string name="user_name">Enter user name</string>
+    <string name="menu_logout">Sign out</string>
+    <string name="event_menu_new_event">Create New Event</string>
+    <string name="menu_add_keens">Keen!</string>
+    <string name="event_keen_button">Keen!</string>
+    <string name="placeholder_event_descr">Super fun golf day for the whole family!</string>
+    <string name="event_maybe_button">Maybe</string>
+
+</resources>

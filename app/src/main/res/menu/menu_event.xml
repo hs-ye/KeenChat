@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:title="@string/event_menu_new_event"
+          android:id="@+id/event_menu_new_event"
+          android:icon="@android:drawable/ic_menu_add"
+          android:showAsAction="always"
+          android:orderInCategory="1"/>
+    <!-- can ignore above error. Android is retarded sometimes-->
+    <!-- i'm told for the above button, having our own icons is better. Currently it runs on the stock icons of whatever
+    phone each person has, which could be different depending on phones -->
+    <item android:title="@string/menu_logout"
+          android:id="@+id/event_menu_logout"
+          app:showAsAction="never"
+          android:orderInCategory="101"/>
+    <item android:id="@+id/action_settings"
+          android:title="@string/action_settings"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+</menu>

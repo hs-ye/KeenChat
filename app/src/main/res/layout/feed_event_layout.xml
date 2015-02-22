@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="10dp"
+              android:id="@+id/event_layout_container"
+              android:background="#fff7ff2a">
+<!-- This file controls how individual events look on the feed.
+currently no difference between true events and others.-->
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/event_picture"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/placeholder_golf"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Super day Golf"
+        android:id="@+id/event_title"
+        android:layout_alignTop="@+id/event_picture"
+        android:layout_toRightOf="@+id/event_picture"
+        android:layout_toEndOf="@+id/event_picture"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/button_keen"
+        android:text="@string/event_keen_button"
+        android:textSize="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_below="@+id/event_descr_short"
+        android:layout_alignLeft="@+id/event_descr_short"
+        android:layout_alignStart="@+id/event_descr_short"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/placeholder_event_descr"
+        android:id="@+id/event_descr_short"
+        android:layout_below="@+id/event_title"
+        android:layout_alignLeft="@+id/event_title"
+        android:layout_alignStart="@+id/event_title"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:id="@+id/button_maybe"
+        android:text="@string/event_maybe_button"
+        android:textSize="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_below="@id/event_descr_short"
+        android:layout_toRightOf="@id/button_keen"
+        android:layout_toEndOf="@id/button_keen"/>
+
+    <!-- placeholder events for now -->
+</RelativeLayout>

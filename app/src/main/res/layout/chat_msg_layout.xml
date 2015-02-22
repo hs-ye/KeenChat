@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:padding="5dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/msgbox_name"
+        android:textStyle="bold"
+        android:text="Name here"
+        android:padding = "4dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/display_picture"
+        android:layout_toEndOf="@+id/display_picture"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/msgbox_text"
+        android:text="@string/swipe_refresh_hint"
+        android:paddingLeft="4dp"
+        android:textColor="@color/primary_material_dark"
+        android:layout_below="@id/msgbox_name"
+        android:layout_toRightOf="@+id/display_picture"
+        android:layout_toEndOf="@+id/display_picture"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/msgbox_time"
+        android:paddingLeft="4dp"
+        android:text="timestamp"
+        android:textSize="10sp"
+        android:textIsSelectable="false"
+        android:textColor="@color/secondary_text_default_material_light"
+        android:layout_alignBottom="@id/msgbox_name"
+        android:layout_toRightOf="@id/msgbox_name"
+        android:layout_toEndOf="@id/msgbox_name"
+        android:paddingBottom="4dp"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/display_picture"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/accent_material_dark"
+        />
+
+
+</RelativeLayout>
