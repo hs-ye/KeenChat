@@ -1,16 +1,23 @@
 package im.keen.keenchat;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
  * Created by user on 2015/2/5.
  */
 public final class DataCore {
+    public final static String KEENUser = "http://chat.server.keen.im/user";
+    public final static String KEENMsg = "http://chat.server.keen.im/message";
+    public final static String KEENChannel = "http://chat.server.keen.im/channel";
+
     private Context mAppContext;
     private static DataCore sDataCore; //A single instance of the datacore is allowed here, as the reference is fixed using static
     private SparseArray<DataUser> mUsers = new SparseArray<DataUser>();
@@ -19,7 +26,6 @@ public final class DataCore {
     private static final String TAG = "DataCore";
     private static final String FILENAME = "Keen_save.json";
     //Todo: Implement serialisation saving/loading
-    //Todo: Data core needs to conform to a finalised UML database framework
 
 
     public static DataCore getDataCore(Context context) {
@@ -82,4 +88,5 @@ public final class DataCore {
     private DataCore(Context c) {
         mAppContext = c;
     }
+
 }

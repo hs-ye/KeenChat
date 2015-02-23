@@ -163,6 +163,7 @@ public class ChatFragment extends Fragment {
                     sent_msg.put("message_text", mChatBox.getText().toString());
                     sent_msg.put("channel_id", event_id);
                     String send_json = mGson.toJson(sent_msg);
+                    Log.v(TAG,"Sending message on channel " + event_id);
                     new sendMessageTask().execute(msgSendEndpoint, "POST", send_json);
                     mChatBox.setText("");
 
@@ -192,17 +193,26 @@ public class ChatFragment extends Fragment {
     public void loadAllData() {
         //TODO: This should be loaded previously, and data should be fetched from the data-core.
         //Todo: need to work out timing of these events, allow for real time updating and logic for refresh is allowed.
-         new DataFetch().FetchMsgs(getActivity(),KEENMsg);
+
         new FetchUsersTask().execute(KEENUser,"GET");
         new FetchChannelsTask().execute(KEENChannel,"GET");
         //MSGS are now being updated from the datacore. But NOT events/users.
+        loadMsgsData(false);
+        updateAdapterView();
+    }
+
+    private void loadMsgsData(boolean callUpdater){
+        new DataFetch().FetchMsgs(getActivity(),KEENMsg);
         if(msgs_adapter_data != null){ msgs_adapter_data.clear();}
         HashMap<Integer,DataMsg> msg_map = DataCore.getDataCore(getActivity()).getDataMsgs();
         for(int j = 1; j<=msg_map.size();j++){
-            msgs_adapter_data.add(msg_map.get(j));
+            if(msg_map.get(j).getChannel_id()==event_id){
+                msgs_adapter_data.add(msg_map.get(j));
+            }
         }
+        //todo: re-route the load data properly through the datacore, with the option to compute which channel's messages belong to which over there
         Log.v(TAG, "Number of messages fetched and loaded: " + msgs_adapter_data.size());
-        updateAdapterView();
+        if(callUpdater){updateAdapterView();}
     }
 
     public void stopRefresh(){
@@ -260,39 +270,6 @@ public class ChatFragment extends Fragment {
         }
     }
 
-/*
-    private class FetchMsgsTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                Log.d(TAG, "Starting background data fetch:"+ urls[1] + urls[0]);
-                return new DataFetch().getStringFromUrl(urls[0],urls[1],null);
-            } catch (IOException IOE) {
-                Log.e(TAG, "Error - could not get data");
-                swipeIsRefreshing[0] = false;
-                stopRefresh();
-            }
-            return null;
-        }
-        //Todo: remove redundant code?
-       @Override
-        protected void onPostExecute(String s) {
-            Log.v(TAG, "Data fetch success. Result: " + s);
-            DataMsg[] msg_list = mGson.fromJson(s, DataMsg[].class);
-            DataCore.getDataCore(getActivity()).setDataMsgs(new ArrayList<DataMsg>(Arrays.asList(msg_list)));
-            msgs_adapter_data.clear();
-            HashMap<Integer,DataMsg> msg_map = DataCore.getDataCore(getActivity()).getDataMsgs();
-            for(int j = 1; j<=msg_map.size();j++){
-                msgs_adapter_data.add(msg_map.get(j));
-            }
-            Log.v(TAG, "Number of messages fetched and loaded: " + msgs_adapter_data.size());
-            updateAdapterView();
-            swipeIsRefreshing[0] = false;
-            stopRefresh();
-        }
-
-    }
-        */
     private class FetchUsersTask extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String... urls) {
@@ -366,7 +343,7 @@ public class ChatFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             Log.v(TAG, "Message sent. Result: " + s);
-            loadAllData();
+            loadMsgsData(true);
             //TODO: change data update logic for sending messages.
         }
     }

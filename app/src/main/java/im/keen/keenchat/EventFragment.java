@@ -1,6 +1,7 @@
 package im.keen.keenchat;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
@@ -25,8 +27,6 @@ public class EventFragment extends Fragment {
     public final String TAG = "KeenEventFragment";
 
     //UI references
-    ScrollView mEventScroll;
-    ScrollView mIdeaScroll;
     ListView mEventList;
     ListView mIdeaList;
 
@@ -36,10 +36,18 @@ public class EventFragment extends Fragment {
     EventAdapter mEventAdapter;
     EventAdapter mIdeaAdapter;
 
-    public static EventFragment newInstance(String auth_token, int user_id){
+    private int user_id;
+    private String auth_token;
+    private String user_name;
+
+    public static EventFragment newInstance(String auth_token, int user_id, String user_name){
+        //we cheat a little by passing in the user name via login, instead of getting it from the database
+        //name list. Since it will have been verified by the server by this point anyway.
+
         Bundle new_frag_args = new Bundle(); //This is the bundle specific to the fragment (not the activity hosting it)
         new_frag_args.putSerializable(LoginActivity.user_id_hash, user_id);
         new_frag_args.putSerializable(LoginActivity.auth_hash,auth_token);
+        new_frag_args.putSerializable(LoginActivity.user_name_hash,user_name);
         EventFragment new_chat_frag = new EventFragment();
         new_chat_frag.setArguments(new_frag_args);
         return new_chat_frag;
@@ -50,7 +58,10 @@ public class EventFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
-
+        user_id = (int)getArguments().getSerializable(LoginActivity.user_id_hash);
+        auth_token = (String)getArguments().getSerializable(LoginActivity.auth_hash);
+        user_name = (String)getArguments().getSerializable(LoginActivity.user_name_hash);
+        Log.d(TAG,"Logged in as user:" + user_id);
         //Todo: Wire up real event display
         DataEvent dummy_event1 = new DataEvent();
         DataEvent dummy_event2 = new DataEvent();
@@ -64,10 +75,10 @@ public class EventFragment extends Fragment {
 
         dummy_event2.setId(2); dummy_event2.setDescription("Dinner in Bill's Canteen");
         dummy_event2.setTitle("Dinner?"); dummy_event2.setFullEvent(true);
-
+/*
         dummy_event3.setId(3); dummy_event3.setDescription("At the lan party house");
         dummy_event3.setTitle("LAN"); dummy_event3.setFullEvent(true);
-
+*/
         dummy_idea1.setId(4); dummy_idea1.setDescription("Party's on in Bill's dungeon");
         dummy_idea1.setTitle("Drinks"); dummy_idea1.setFullEvent(false);
 
@@ -78,14 +89,16 @@ public class EventFragment extends Fragment {
         dummy_idea3.setTitle("Beach time"); dummy_idea3.setFullEvent(false);
 
         event_adapter_data.add(dummy_event1);
-        event_adapter_data.add(dummy_idea1);
         event_adapter_data.add(dummy_event2);
+        //event_adapter_data.add(dummy_event3);
         event_idea_adapter_data.add(dummy_idea1);
         event_idea_adapter_data.add(dummy_idea2);
         event_idea_adapter_data.add(dummy_idea3);
 
-        mEventAdapter = new EventAdapter(event_adapter_data); //Bind adapter to data source.
-        mIdeaAdapter = new EventAdapter(event_idea_adapter_data);
+        mEventAdapter = new EventAdapter(event_adapter_data, true); //Bind adapter to data source.
+        mIdeaAdapter = new EventAdapter(event_idea_adapter_data, false);
+        //the boolean argument tells the adapter whether to use the event list template or the broadcast
+        //ideas list template
     }
 
     @Nullable
@@ -99,6 +112,21 @@ public class EventFragment extends Fragment {
         mIdeaList = (ListView)v.findViewById(R.id.event_idea_listView);
         //Todo: Get it to display user's name
         updateAdapterView();
+        mEventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                int goto_event_id = mEventAdapter.getItem(position).getId();
+
+                Log.d(TAG, "Event accessed: " + goto_event_id);
+                Intent i = new Intent(getActivity(), ChatActivity.class);
+                i.putExtra(LoginActivity.user_id_hash,user_id);
+                i.putExtra(LoginActivity.auth_hash,auth_token);
+                i.putExtra(LoginActivity.event_id_hash,goto_event_id);
+                startActivity(i);
+            }
+        });
+
         return v;
     }
 
@@ -106,7 +134,10 @@ public class EventFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_event,menu);
+        getActivity().getActionBar().setTitle(user_name + "'s Events");
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,13 +184,19 @@ public class EventFragment extends Fragment {
     }
 
     private class EventAdapter extends ArrayAdapter<DataEvent> {
-        public EventAdapter(ArrayList<DataEvent> events) {
+        private boolean isEventList;
+        public EventAdapter(ArrayList<DataEvent> events, boolean isEvents) {
             super(getActivity(), 0, events);
+            isEventList = isEvents;
         }
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             if (convertView == null) {
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.feed_event_layout, null);
+                if (isEventList) {
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.feed_event_layout, null);
+                } else {
+                    convertView = getActivity().getLayoutInflater().inflate(R.layout.feed_broadcast_layout, null);
+                }
             }
             //Todo: Fix up actual fields for event. incl. time etc.
             DataEvent feed_event = getItem(position); //This is getting the message from the adapter's data source
@@ -176,13 +213,6 @@ public class EventFragment extends Fragment {
             return convertView;
         }
             //Todo: Set onclick listeners here for buttons
-
-        /*
-        @Override
-        public DataEvent getItem(int position) {
-            return super.getItem(getCount() - position - 1);
-        } //Reverses
-        */
     }
 
 

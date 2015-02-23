@@ -10,7 +10,7 @@ public class EventActivity extends Activity_SingleFragment {
     protected Fragment createFragment() {
         String auth_token = (String)getIntent().getSerializableExtra(LoginActivity.auth_hash);
         int user_id = (int)getIntent().getSerializableExtra(LoginActivity.user_id_hash);
-
-        return EventFragment.newInstance(auth_token,user_id);
+        String user_name = (String)getIntent().getSerializableExtra(LoginActivity.user_name_hash);
+        return EventFragment.newInstance(auth_token,user_id,user_name);
     }
 }

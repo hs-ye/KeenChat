@@ -49,6 +49,9 @@ public class LoginActivity extends Activity {
     public final static String event_id_hash = "im.keen.keenchat.chat.event_id.key"; //Currently the channels are the events
     public final static String user_id_hash = "im.keen.keenchat.chat.user_id_hash.key";
     public final static String auth_hash= "im.keen.keenchat.chat.auth_hash.key";
+    public final static String user_name_hash = "im.keen.keenchat.chat.user_name.key";
+    //We're going to cheat a little and let get the name of the user
+    //from the login, before the user list is actually loaded from the web.
 
     public static final String TAG = "Login Screen";
 
@@ -57,6 +60,7 @@ public class LoginActivity extends Activity {
      */
     private UserLoginTask mAuthTask = null;
     Gson mGson = new GsonBuilder().create();
+
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -244,6 +248,7 @@ public class LoginActivity extends Activity {
                 //Intent i = new Intent(LoginActivity.this,ChatActivity.class);
                 i.putExtra(auth_hash,auth_token);
                 i.putExtra(user_id_hash,user_id);
+                i.putExtra(user_name_hash,mUsername);
 
                 startActivity(i);
             } catch (Exception e) {

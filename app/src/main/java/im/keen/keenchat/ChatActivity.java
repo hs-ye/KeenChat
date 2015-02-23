@@ -24,9 +24,9 @@ public class ChatActivity extends Activity_SingleFragment {
         //here, so the fragment can retrieve it once it's running.
         String auth_token = (String)getIntent().getSerializableExtra(LoginActivity.auth_hash);
         int user_id = (int)getIntent().getSerializableExtra(LoginActivity.user_id_hash);
-        //int event_id = (int) getIntent().getSerializableExtra(LoginActivity.event_id_hash);
+        int event_id = (int) getIntent().getSerializableExtra(LoginActivity.event_id_hash);
         //Todo: Undo testing default event id
-        int event_id = 1;
+        //int event_id = 1;
         return ChatFragment.newInstance(auth_token,event_id,user_id);
     }
 }
